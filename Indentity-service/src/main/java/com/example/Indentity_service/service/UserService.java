@@ -49,4 +49,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Nguoi dung khong tim thay"));
     }
 
+    public void deleteUser(String userId){
+        userRepository.deleteById(userId);
+    }
 }
