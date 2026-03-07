@@ -1,0 +1,21 @@
+package com.example.Indentity_service.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // Quan trọng nhất để Postman chạy được POST
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults()) // Cho phép xác thực kiểu Basic Auth (Postman đang dùng)
+                .formLogin(Customizer.withDefaults());
+
+        return http.build();
+    }
+}

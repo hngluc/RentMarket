@@ -1,18 +1,11 @@
-package com.example.Indentity_service.entity;
+package com.example.Indentity_service.dto.request;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
 
 @Data
 @Getter
 @Setter
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class UserCreationRequest {
     private String id;
     private String username;
     private String password;

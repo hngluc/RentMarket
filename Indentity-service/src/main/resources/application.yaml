@@ -7,6 +7,11 @@ spring:
   application:
     name: Indentity-service
 
+  security:
+    user:
+      name: hoangluc
+      password: 1234567
+
   datasource:
     url: jdbc:mysql://localhost:3306/identity_service
     username: root
