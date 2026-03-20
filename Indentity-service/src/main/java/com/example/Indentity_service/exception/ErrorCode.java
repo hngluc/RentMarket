@@ -7,7 +7,7 @@ public enum ErrorCode {
     USERNAME_INVALID(1003, "Tài khoản phải lớn hớn < 2 và > 20"),
     PASSWORD_INVALD(1004, "Password phải lớn hơn 8 ký tự"),
     EMAIL_INVALID(1005, "Email phải đúng dinh dạng"),
-
+    USER_NOT_EXISTED(1006, "User Not Existed"),
     ;
 
     ErrorCode(int code, String message) {
