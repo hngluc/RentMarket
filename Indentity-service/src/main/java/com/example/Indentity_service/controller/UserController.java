@@ -3,6 +3,7 @@ package com.example.Indentity_service.controller;
 import com.example.Indentity_service.dto.request.UserCreationRequest;
 import com.example.Indentity_service.dto.request.UserUpdateRequest;
 import com.example.Indentity_service.dto.response.ApiResponse;
+import com.example.Indentity_service.dto.response.UserResponse;
 import com.example.Indentity_service.entity.User;
 import com.example.Indentity_service.service.UserService;
 import jakarta.validation.Valid;
@@ -32,12 +33,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    User getUserById(@PathVariable String userId) {
+    UserResponse getUserById(@PathVariable String userId) {
         return userService.getUser(userId);
     }
 
     @PutMapping("/{userId}")
-    User updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
+    UserResponse updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         return userService.updateUser(userId, request);
     }
 

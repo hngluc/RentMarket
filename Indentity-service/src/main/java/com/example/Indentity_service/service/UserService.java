@@ -2,6 +2,7 @@ package com.example.Indentity_service.service;
 
 import com.example.Indentity_service.dto.request.UserCreationRequest;
 import com.example.Indentity_service.dto.request.UserUpdateRequest;
+import com.example.Indentity_service.dto.response.UserResponse;
 import com.example.Indentity_service.entity.User;
 import com.example.Indentity_service.exception.AppException;
 import com.example.Indentity_service.exception.ErrorCode;
@@ -20,7 +21,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public User createUser(UserCreationRequest request){
+    public User createUser(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
 
@@ -29,24 +30,25 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(String userId, UserUpdateRequest request){
-        User user = getUser(userId);
+    public UserResponse updateUser(String userId, UserUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Nguoi dung khong tim thay"));
+
         userMapper.updateUser(user, request);
 
-        return userRepository.save(user);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
-
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return userRepository.findAll();
     }
 
-    public User getUser(String id){
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Nguoi dung khong tim thay"));
+    public UserResponse getUser(String id) {
+        return userMapper.toUserResponse(userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nguoi dung khong tim thay")));
     }
 
-    public void deleteUser(String userId){
+    public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
 }
