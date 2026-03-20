@@ -3,6 +3,8 @@ package com.example.Indentity_service.service;
 import com.example.Indentity_service.dto.request.UserCreationRequest;
 import com.example.Indentity_service.dto.request.UserUpdateRequest;
 import com.example.Indentity_service.entity.User;
+import com.example.Indentity_service.exception.AppException;
+import com.example.Indentity_service.exception.ErrorCode;
 import com.example.Indentity_service.repository.UserRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class UserService {
         User user = new User();
 
         if (userRepository.existsByUsername(request.getUsername()))
-            throw new RuntimeException("Người dùng đã tồn tại, tạo tài khoản khác đi: " + request.getUsername());
+            throw new AppException(ErrorCode.USER_EXISTED);
 
 
         user.setUsername(request.getUsername());

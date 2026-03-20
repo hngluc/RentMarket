@@ -10,16 +10,17 @@ import lombok.*;
 @Setter
 public class UserCreationRequest {
     private String id;
-    @Size(min = 2, max = 20, message = "Tài khoản phải lớn hớn < 2 và > 20")
+
+    @Size(min = 3, max = 20, message = "USERNAME_INVALID")
     private String username;
 
-    @Size(min = 8, message = "Password phải lớn hơn 8 ký tự")
+    @Size(min = 8, message = "PASSWORD_INVALD")
     private String password;
     private String firstName;
     private String lastName;
 
     @NotNull(message = "Không được để trống email")
-    @Email(message = "Email phải đúng dinh dạng")
+    @Email(message = "EMAIL_INVALID")
     private String email;
 
     public String getId() {
