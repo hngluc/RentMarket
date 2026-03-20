@@ -1,17 +1,18 @@
 package com.example.Indentity_service.dto.request;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String email;
+    String password;
+    String firstName;
+    String lastName;
+    String email;
 
     public String getPassword() {
         return password;

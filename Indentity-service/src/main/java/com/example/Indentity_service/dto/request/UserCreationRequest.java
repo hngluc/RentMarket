@@ -4,24 +4,27 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
-    private String id;
+    String id;
 
     @Size(min = 3, max = 20, message = "USERNAME_INVALID")
-    private String username;
+    String username;
 
     @Size(min = 8, message = "PASSWORD_INVALD")
-    private String password;
-    private String firstName;
-    private String lastName;
+    String password;
+    String firstName;
+    String lastName;
 
     @NotNull(message = "Không được để trống email")
     @Email(message = "EMAIL_INVALID")
-    private String email;
+    String email;
 
     public String getId() {
         return id;

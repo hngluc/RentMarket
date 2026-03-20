@@ -42,10 +42,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
         try{
             errorCode = ErrorCode.valueOf(enumKey);
-        } catch (IllegalArgumentException ex){
-
-        }
-
+        } catch (IllegalArgumentException ex){}
 
         ApiResponse apiResponse = new ApiResponse();
 
