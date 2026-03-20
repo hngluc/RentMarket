@@ -6,14 +6,12 @@ import com.example.Indentity_service.entity.User;
 import com.example.Indentity_service.exception.AppException;
 import com.example.Indentity_service.exception.ErrorCode;
 import com.example.Indentity_service.repository.UserRepository;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Data
 public class UserService {
     @Autowired
     private UserRepository userRepository;
