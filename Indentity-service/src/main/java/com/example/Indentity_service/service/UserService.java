@@ -5,6 +5,7 @@ import com.example.Indentity_service.dto.request.UserUpdateRequest;
 import com.example.Indentity_service.entity.User;
 import com.example.Indentity_service.exception.AppException;
 import com.example.Indentity_service.exception.ErrorCode;
+import com.example.Indentity_service.mapper.UserMapper;
 import com.example.Indentity_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,29 +17,21 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(UserCreationRequest request){
-        User user = new User();
+    @Autowired
+    private UserMapper userMapper;
 
+    public User createUser(UserCreationRequest request){
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
 
-
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
+        User user = userMapper.toUser(request);
 
         return userRepository.save(user);
     }
 
     public User updateUser(String userId, UserUpdateRequest request){
         User user = getUser(userId);
-
-        user.setPassword(request.getPassword());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
+        userMapper.updateUser(user, request);
 
         return userRepository.save(user);
     }
