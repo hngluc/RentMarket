@@ -2,22 +2,32 @@ package com.example.Indentity_service.controller;
 
 import com.example.Indentity_service.dto.request.UserCreationRequest;
 import com.example.Indentity_service.dto.request.UserUpdateRequest;
+import com.example.Indentity_service.dto.response.ApiResponse;
+import com.example.Indentity_service.dto.response.UserResponse;
 import com.example.Indentity_service.entity.User;
 import com.example.Indentity_service.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
-    @Autowired
-    private UserService userService;
+    UserService userService;
 
     @PostMapping
-    User createUser(@RequestBody UserCreationRequest request) {
-        return userService.createUser(request);
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(userService.createUser(request));
+
+        return apiResponse;
     }
 
     @GetMapping
@@ -26,20 +36,20 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    User getUserById(@PathVariable String userId) {
+    UserResponse getUserById(@PathVariable String userId) {
         return userService.getUser(userId);
     }
 
     @PutMapping("/{userId}")
-    User updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
+    UserResponse updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         return userService.updateUser(userId, request);
     }
 
     @DeleteMapping("/{userId}")
-    String deleteUser(@PathVariable String userId) {
-        userService.deleteUser(userId);
-        return "Nguoi dung da duoc xoa!";
+    ApiResponse<User> deleteUser(@PathVariable String userId) {
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.deleteUser(userId));
+        return apiResponse;
     }
-
 
 }

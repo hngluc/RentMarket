@@ -1,4 +1,4 @@
-package com.example.Indentity_service.dto.request;
+package com.example.Indentity_service.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
+public class UserResponse {
+    String id;
+    String username;
     String password;
     String firstName;
     String lastName;
