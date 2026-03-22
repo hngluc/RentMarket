@@ -3,6 +3,8 @@ package com.example.Indentity_service.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,8 +13,8 @@ import lombok.experimental.FieldDefaults;
 public class UserResponse {
     String id;
     String username;
-    String password;
     String firstName;
     String lastName;
     String email;
+    Set<String> roles;
 }

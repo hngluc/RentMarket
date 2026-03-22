@@ -4,7 +4,6 @@ import com.example.Indentity_service.dto.request.UserCreationRequest;
 import com.example.Indentity_service.dto.request.UserUpdateRequest;
 import com.example.Indentity_service.dto.response.ApiResponse;
 import com.example.Indentity_service.dto.response.UserResponse;
-import com.example.Indentity_service.entity.User;
 import com.example.Indentity_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -22,8 +21,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setResult(userService.createUser(request));
 
@@ -31,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping
-    List<User> getAllUsers() {
+    List<UserResponse> getAllUsers() {
         return userService.getUsers();
     }
 
@@ -46,8 +45,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    ApiResponse<User> deleteUser(@PathVariable String userId) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
+    ApiResponse<UserResponse> deleteUser(@PathVariable String userId) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.deleteUser(userId));
         return apiResponse;
     }

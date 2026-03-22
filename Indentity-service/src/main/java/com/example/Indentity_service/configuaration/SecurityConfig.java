@@ -10,6 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -22,6 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig {
 
+    //Authorization Endpoints
     String[] PUBLIC_ENDPOINTS = {
             "/users",
             "/auth/token",
@@ -42,6 +45,7 @@ public class SecurityConfig {
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()))
         );
 
+        //Disable Attack csrf
         http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
@@ -55,4 +59,11 @@ public class SecurityConfig {
                 .macAlgorithm(MacAlgorithm.HS512)
                 .build();
     };
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder(10);
+    }
+
+
 }
