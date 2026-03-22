@@ -1,5 +1,6 @@
 package com.example.Indentity_service.configuaration;
 
+import com.example.Indentity_service.enums.Role;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -27,8 +30,7 @@ public class SecurityConfig {
     //Authorization Endpoints
     String[] PUBLIC_ENDPOINTS = {
             "/users",
-            "/auth/token",
-            "/auth/introspect"
+            "/auth/**"
     };
 
     @NonFinal
@@ -38,17 +40,33 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+        http.authorizeHttpRequests(request ->
+                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users")
+                        .hasRole(Role.ADMIN.name())
                 .anyRequest().authenticated());
 
         http.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()))
+                oauth2.jwt(jwtConfigurer ->
+                        jwtConfigurer.decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(jwtConverter()))
         );
 
         //Disable Attack csrf
         http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
+    }
+
+    @Bean
+    JwtAuthenticationConverter jwtConverter(){
+        JwtGrantedAuthoritiesConverter jwtgrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtgrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(jwtgrantedAuthoritiesConverter);
+
+        return jwtConverter;
     }
 
     @Bean

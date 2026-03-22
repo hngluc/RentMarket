@@ -4,6 +4,7 @@ import com.example.Indentity_service.dto.request.AuthenticationRequest;
 import com.example.Indentity_service.dto.request.IntrospectRequest;
 import com.example.Indentity_service.dto.response.AuthenticaitionResponse;
 import com.example.Indentity_service.dto.response.IntrospectResponse;
+import com.example.Indentity_service.entity.User;
 import com.example.Indentity_service.exception.AppException;
 import com.example.Indentity_service.exception.ErrorCode;
 import com.example.Indentity_service.repository.UserRepository;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import org.springframework.util.CollectionUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,10 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Date;
+import java.util.StringJoiner;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -64,8 +69,7 @@ public class AuthenticationService {
                 user.getPassword());
         if (!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
-
-        var token = generateToken(request.getUsername());
+        var token = generateToken(user);
 
         return AuthenticaitionResponse.builder()
                 .token(token)
@@ -73,16 +77,16 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(String username) {
+    private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(user.getUsername())
                 .issuer("hoanglucne")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("authorities", "Custom")
+                .claim("scope", buildScope(user))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -96,5 +100,13 @@ public class AuthenticationService {
             log.error("Canot create token");
             throw new RuntimeException(e);
         }
+    }
+
+    private String buildScope(User user) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (!CollectionUtils.isEmpty(user.getRoles()))
+            user.getRoles().forEach(stringJoiner::add);
+
+        return stringJoiner.toString();
     }
 }
