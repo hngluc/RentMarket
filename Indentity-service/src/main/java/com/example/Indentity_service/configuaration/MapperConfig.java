@@ -1,4 +1,4 @@
-package com.example.Indentity_service.config;
+package com.example.Indentity_service.configuaration;
 
 import com.example.Indentity_service.mapper.UserMapper;
 import org.mapstruct.factory.Mappers;
