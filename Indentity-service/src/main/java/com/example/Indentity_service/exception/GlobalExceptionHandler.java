@@ -1,7 +1,6 @@
 package com.example.Indentity_service.exception;
 
 import com.example.Indentity_service.dto.response.ApiResponse;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -9,17 +8,32 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.text.ParseException;
+import com.nimbusds.jose.JOSEException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handlingruntimeExceptionHandler(RuntimeException e) {
+    ResponseEntity<ApiResponse> handlingRuntimeException(Exception e) {
+        log.error("Exception: ", e);
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @ExceptionHandler(value = { ParseException.class, JOSEException.class })
+    ResponseEntity<ApiResponse> handlingTokenException(Exception e) {
+        log.error("Token Exception: ", e);
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(ErrorCode.UNAUTHENTICATED.getCode());
+        apiResponse.setMessage(ErrorCode.UNAUTHENTICATED.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
@@ -40,9 +54,10 @@ public class GlobalExceptionHandler {
         String enumKey = e.getFieldError().getDefaultMessage();
 
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
-        try{
+        try {
             errorCode = ErrorCode.valueOf(enumKey);
-        } catch (IllegalArgumentException ex){}
+        } catch (IllegalArgumentException ex) {
+        }
 
         ApiResponse apiResponse = new ApiResponse();
 

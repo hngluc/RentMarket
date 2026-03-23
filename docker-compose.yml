@@ -17,7 +17,7 @@ services:
 
   # Cấu hình Spring Boot App
   app:
-    build: .
+    build: Indentity-service
     container_name: identity-app
     restart: unless-stopped
     ports:
