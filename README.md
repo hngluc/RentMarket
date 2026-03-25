@@ -1,3 +1,7 @@
+# RentMarket
+
+Có thể xóa Getter/Setter đi vì Lombok của tao không hoạt động
+=======
 #  RentMarket
 ---
 ##  Giới thiệu
@@ -96,4 +100,3 @@ RentMarket được xây dựng nhằm:
 - **Docker Compose**
   - Chạy nhiều service cùng lúc (mở rộng hệ thống)
 ---
-
