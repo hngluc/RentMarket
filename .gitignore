@@ -64,3 +64,8 @@ $RECYCLE.BIN/
 # Java VM Crash Logs
 hs_err_pid*
 replay_pid*
+
+# ==========================================
+# 5. DỮ LIỆU RUNTIME (Upload Files)
+# ==========================================
+**/uploads/
