@@ -1,7 +1,5 @@
 package com.example.Indentity_service.dto.request;
 
-import java.util.List;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,10 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
-    String password;
-    String firstName;
-    String lastName;
-    String email;
-    List<String> roles;
+public class PermissionRequest {
+    String name;
+    String description;
 }
