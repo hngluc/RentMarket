@@ -1,22 +1,25 @@
-const Footer = () => {
-  return (
-    <footer className="w-full bg-[#f6f7f8] dark:bg-[#101922] border-t border-gray-200 dark:border-gray-800 py-12 transition-colors duration-200 mt-auto">
-      <div className="mx-auto max-w-[1280px] px-4 md:px-10 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="text-sm text-gray-500 dark:text-gray-400">
-          &copy; {new Date().getFullYear()} RentalMarket, Inc. All rights reserved.
+import { Link } from 'react-router-dom';
+
+const Footer = () => (
+  <footer className="w-full bg-white border-t border-gray-100 py-8 mt-auto">
+    <div className="mx-auto max-w-[1280px] px-4 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="flex items-center gap-2">
+        <div className="w-6 h-6 rounded-lg bg-[#1b64f2] flex items-center justify-center">
+          <span className="material-symbols-outlined text-white text-[14px]">handshake</span>
         </div>
-        <div className="flex gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">
-          <a className="hover:text-primary transition-colors cursor-pointer">Privacy</a>
-          <a className="hover:text-primary transition-colors cursor-pointer">Terms</a>
-          <a className="hover:text-primary transition-colors cursor-pointer">Sitemap</a>
-        </div>
-        <div className="flex gap-4 text-gray-500 dark:text-gray-400">
-          <span className="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">language</span>
-          <span className="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">attach_money</span>
-        </div>
+        <span className="text-sm text-slate-500">© {new Date().getFullYear()} RentalMarket, Inc.</span>
       </div>
-    </footer>
-  );
-};
+      <div className="flex gap-5 text-sm text-slate-400">
+        <Link to="/about" className="hover:text-[#1b64f2] transition-colors cursor-pointer">Giới thiệu</Link>
+        <Link to="/privacy" className="hover:text-[#1b64f2] transition-colors cursor-pointer">Bảo mật</Link>
+        <Link to="/terms" className="hover:text-[#1b64f2] transition-colors cursor-pointer">Điều khoản</Link>
+      </div>
+      <div className="flex gap-3 text-slate-400">
+        <span className="material-symbols-outlined cursor-pointer hover:text-[#1b64f2] transition-colors text-[20px]">language</span>
+        <span className="material-symbols-outlined cursor-pointer hover:text-[#1b64f2] transition-colors text-[20px]">attach_money</span>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;
