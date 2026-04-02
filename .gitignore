@@ -1,16 +1,10 @@
-# Compiled class file
+# ==========================================
+# 1. BIÊN DỊCH & BUID (Maven/Gradle/Java)
+# ==========================================
 *.class
-
-# Log file
 *.log
-
-# BlueJ files
 *.ctxt
-
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
 *.nar
@@ -19,6 +13,59 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Bỏ qua thư mục build của Spring Boot / Java
+target/
+build/
+out/
+.gradle/
+
+# ==========================================
+# 2. MÔI TRƯỜNG & BIẾN BẢO MẬT
+# ==========================================
+.env
+.env.*
+application-dev.yml
+application-prod.yml
+
+# ==========================================
+# 3. CÔNG CỤ LẬP TRÌNH (IDE)
+# ==========================================
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse / STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### VS Code ###
+.vscode/
+
+# ==========================================
+# 4. HỆ ĐIỀU HÀNH & KHÁC
+# ==========================================
+# Windows
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Java VM Crash Logs
 hs_err_pid*
 replay_pid*
+
+# ==========================================
+# 5. DỮ LIỆU RUNTIME (Upload Files)
+# ==========================================
+**/uploads/
