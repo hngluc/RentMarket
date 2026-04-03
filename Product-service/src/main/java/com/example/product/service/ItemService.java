@@ -54,6 +54,7 @@ public class ItemService {
     private final ItemImageMapper itemImageMapper;
     private final RestTemplate restTemplate;
     private final JwtUtils jwtUtils;
+    private final FavoriteService favoriteService;
 
     @Value("${app.identity-service.url:http://identity-service:8080/identity/users}")
     private String identityServiceUrl;
@@ -134,6 +135,7 @@ public class ItemService {
 
         ItemResponse response = itemMapper.toItemResponse(item);
         response.setOwner(fetchOwnerInfo(item.getOwnerId()));
+        response.setIsFavoritedByMe(favoriteService.isFavoritedByMe(id));
         return response;
     }
 
@@ -147,6 +149,17 @@ public class ItemService {
             throw new AppException(ErrorCode.ITEM_ALREADY_RENTED);
         }
         item.setStatus(ItemStatus.RENTED);
+        return itemMapper.toItemResponse(itemRepository.save(item));
+    }
+
+    /**
+     * Releases an item back to AVAILABLE status.
+     * Called by Rental-service when a booking is completed.
+     */
+    @Transactional
+    public ItemResponse releaseItem(Long id) {
+        Item item = findItemById(id);
+        item.setStatus(ItemStatus.AVAILABLE);
         return itemMapper.toItemResponse(itemRepository.save(item));
     }
 
@@ -232,14 +245,18 @@ public class ItemService {
                 .pageSize(itemPage.getSize())
                 .totalElements(itemPage.getTotalElements())
                 .data(itemPage.getContent().stream()
-                        .map(itemMapper::toItemResponse)
+                        .map(item -> {
+                            ItemResponse res = itemMapper.toItemResponse(item);
+                            res.setIsFavoritedByMe(favoriteService.isFavoritedByMe(item.getId()));
+                            return res;
+                        })
                         .toList())
                 .build();
     }
 
     /**
-     * Attempts to fetch owner information from the Identity service.
-     * Falls back to a default "Unknown" if the service is unavailable.
+     * Lấy thông tin chủ đồ từ Identity-service.
+     * Fallback về giá trị mặc định nếu service không phản hồi.
      */
     private OwnerInfoResponse fetchOwnerInfo(String ownerId) {
         OwnerInfoResponse ownerInfo = OwnerInfoResponse.builder()
@@ -249,18 +266,28 @@ public class ItemService {
                 .build();
 
         try {
-            String url = identityServiceUrl + "/" + ownerId;
+            String url = identityServiceUrl + "/by-username/" + ownerId;
             ApiResponse<?> apiResponse = restTemplate.getForObject(url, ApiResponse.class);
             if (apiResponse != null && apiResponse.getResult() != null) {
                 LinkedHashMap<?, ?> result = (LinkedHashMap<?, ?>) apiResponse.getResult();
-                if (result.containsKey("username")) {
-                    ownerInfo.setName((String) result.get("username"));
-                } else if (result.containsKey("firstName")) {
-                    ownerInfo.setName(result.get("firstName") + " " + result.get("lastName"));
+
+                String firstName = (String) result.get("firstName");
+                String lastName  = (String) result.get("lastName");
+                String username  = (String) result.get("username");
+
+                if (firstName != null || lastName != null) {
+                    String fullName = ((firstName != null ? firstName : "").trim()
+                            + " " + (lastName != null ? lastName : "").trim()).trim();
+                    ownerInfo.setName(fullName.isEmpty() ? username : fullName);
+                } else if (username != null) {
+                    ownerInfo.setName(username);
                 }
+
+                ownerInfo.setPhone((String) result.get("phone"));
+                ownerInfo.setAddress((String) result.get("address"));
             }
         } catch (Exception e) {
-            log.warn("Could not fetch owner info for ownerId={}: {}", ownerId, e.getMessage());
+            log.warn("Không thể lấy thông tin chủ đồ ownerId={}: {}", ownerId, e.getMessage());
         }
 
         return ownerInfo;

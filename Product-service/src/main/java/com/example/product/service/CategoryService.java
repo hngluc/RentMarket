@@ -26,6 +26,13 @@ public class CategoryService {
     private final ItemRepository itemRepository;
 
     @Transactional(readOnly = true)
+    public List<CategoryResponse> getCategoryTree() {
+        return categoryRepository.findByParentIsNull().stream()
+                .map(categoryMapper::toCategoryResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toCategoryResponse)
@@ -39,6 +46,13 @@ public class CategoryService {
         }
 
         Category category = categoryMapper.toCategory(request);
+        
+        if (request.getParentId() != null) {
+            Category parent = categoryRepository.findById(request.getParentId())
+                    .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+            category.setParent(parent);
+        }
+
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
@@ -53,6 +67,18 @@ public class CategoryService {
         }
 
         categoryMapper.updateCategory(category, request);
+
+        if (request.getParentId() != null) {
+            if (id.equals(request.getParentId())) {
+                throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION); // Tránh trỏ parent vào chính nó
+            }
+            Category parent = categoryRepository.findById(request.getParentId())
+                    .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+            category.setParent(parent);
+        } else {
+            category.setParent(null); // Cho phép đưa ra gốc
+        }
+
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
