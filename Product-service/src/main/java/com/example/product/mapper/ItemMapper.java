@@ -9,7 +9,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, ItemImageMapper.class}, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(
+    componentModel = "spring", 
+    uses = {CategoryMapper.class, ItemImageMapper.class}, 
+    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+    unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE
+)
 public interface ItemMapper {
 
     @Mapping(target = "category", ignore = true)

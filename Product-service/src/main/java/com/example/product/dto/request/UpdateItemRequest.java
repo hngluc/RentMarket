@@ -19,6 +19,9 @@ public class UpdateItemRequest {
     @Min(value = 0, message = "Price per day must be at least 0")
     Double pricePerDay;
 
+    @Min(value = 1, message = "Quantity must be at least 1")
+    Integer quantity;
+
     ItemStatus status;
 
     Long categoryId;

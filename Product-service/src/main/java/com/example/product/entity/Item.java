@@ -48,6 +48,11 @@ public class Item {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    /** Số lượng sản phẩm có sẵn để cho thuê (mặc định 1) */
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer quantity = 1;
+
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude

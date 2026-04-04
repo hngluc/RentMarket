@@ -13,7 +13,7 @@ spring:
       password: 1234567
 
   datasource:
-    url: jdbc:mysql://localhost:3307/product_service
+    url: jdbc:mysql://localhost:3307/product_service?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -30,3 +30,8 @@ spring:
 
 jwt:
   signerKey: "_G8QMpPL2NdilojwwGVfLjMfUvkn_6fBMUZ30WYQAtA1234567890abcdefghijklm"
+
+app:
+  identity-service:
+    # Docker: http://identity-service:8080/identity/users
+    url: http://localhost:8080/identity/users

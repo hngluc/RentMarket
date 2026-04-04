@@ -1,5 +1,7 @@
 package com.example.Indentity_service.dto.request;
 
+import java.util.List;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,4 +15,5 @@ public class UserUpdateRequest {
     String firstName;
     String lastName;
     String email;
+    List<String> roles;
 }

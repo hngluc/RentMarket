@@ -12,4 +12,6 @@ public class OwnerInfoResponse {
     String id;
     String name;
     Double rating;
+    String phone;
+    String address;
 }

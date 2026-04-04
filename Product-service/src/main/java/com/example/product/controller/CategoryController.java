@@ -25,6 +25,13 @@ public class CategoryController {
                 .build();
     }
 
+    @GetMapping("/tree")
+    public ApiResponse<List<CategoryResponse>> getCategoryTree() {
+        return ApiResponse.<List<CategoryResponse>>builder()
+                .result(categoryService.getCategoryTree())
+                .build();
+    }
+
     @PostMapping
     public ApiResponse<CategoryResponse> createCategory(@Valid @RequestBody CreateCategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()

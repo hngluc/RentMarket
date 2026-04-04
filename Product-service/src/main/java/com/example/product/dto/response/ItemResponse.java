@@ -22,5 +22,7 @@ public class ItemResponse {
     CategoryResponse category;
     List<ItemImageResponse> images;
     Long viewCount;
+    Integer quantity;
+    Boolean isFavoritedByMe;
     LocalDateTime createdAt;
 }
