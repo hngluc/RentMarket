@@ -1,9 +1,9 @@
 package com.example.Indentity_service.dto.response;
 
-import java.util.Set;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -16,5 +16,8 @@ public class UserResponse {
     String firstName;
     String lastName;
     String email;
-    Set<RoleResponse> roles;
+    String phone;
+    String address;
+    String avatarUrl;
+    Set<String> roles;
 }
