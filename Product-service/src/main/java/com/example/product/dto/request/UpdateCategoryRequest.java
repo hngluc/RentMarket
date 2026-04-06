@@ -11,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class UpdateCategoryRequest {
     String name;
     String description;
+    Long parentId;
 }

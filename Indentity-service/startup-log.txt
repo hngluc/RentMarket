@@ -1,0 +1,81 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.example:Indentity-service >--------------------
+[INFO] Building Indentity-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:4.0.3:run (default-cli) > test-compile @ Indentity-service >>>
+[INFO] 
+[INFO] --- build-helper:3.6.1:add-source (add-source) @ Indentity-service ---
+[INFO] Source directory: D:\J2EE\DACK\Indentity-service\target\generated-sources\annotations added.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ Indentity-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ Indentity-service ---
+[INFO] Recompiling the module because of added or removed source files.
+[INFO] Compiling 43 source files with javac [debug parameters release 21] to target\classes
+[WARNING] /D:/J2EE/DACK/Indentity-service/src/main/java/com/example/Indentity_service/mapper/UserMapper.java:[14,10] Unmapped target property: "roles".
+[WARNING] /D:/J2EE/DACK/Indentity-service/src/main/java/com/example/Indentity_service/mapper/UserMapper.java:[19,10] Unmapped target properties: "id, username".
+[INFO] /D:/J2EE/DACK/Indentity-service/src/main/java/com/example/Indentity_service/exception/GlobalExceptionHandler.java: D:\J2EE\DACK\Indentity-service\src\main\java\com\example\Indentity_service\exception\GlobalExceptionHandler.java uses unchecked or unsafe operations.
+[INFO] /D:/J2EE/DACK/Indentity-service/src/main/java/com/example/Indentity_service/exception/GlobalExceptionHandler.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ Indentity-service ---
+[INFO] skip non existing resourceDirectory D:\J2EE\DACK\Indentity-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ Indentity-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] <<< spring-boot:4.0.3:run (default-cli) < test-compile @ Indentity-service <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:4.0.3:run (default-cli) @ Indentity-service ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.0.3)
+
+2026-03-28T16:13:12.244+07:00  INFO 32068 --- [           main] c.e.I.IndentityServiceApplication        : Starting IndentityServiceApplication using Java 21.0.7 with PID 32068 (D:\J2EE\DACK\Indentity-service\target\classes started by nguye in D:\J2EE\DACK\Indentity-service)
+2026-03-28T16:13:12.246+07:00  INFO 32068 --- [           main] c.e.I.IndentityServiceApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-03-28T16:13:13.390+07:00  INFO 32068 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-28T16:13:13.646+07:00  INFO 32068 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 233 ms. Found 4 JPA repository interfaces.
+2026-03-28T16:13:14.688+07:00  INFO 32068 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-03-28T16:13:14.703+07:00  INFO 32068 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-28T16:13:14.703+07:00  INFO 32068 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-03-28T16:13:14.778+07:00  INFO 32068 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2475 ms
+2026-03-28T16:13:14.961+07:00  INFO 32068 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-03-28T16:13:15.003+07:00  INFO 32068 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-03-28T16:13:15.413+07:00  INFO 32068 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-28T16:13:15.444+07:00  INFO 32068 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-28T16:13:15.921+07:00  INFO 32068 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5fd4e67f
+2026-03-28T16:13:15.925+07:00  INFO 32068 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-28T16:13:16.049+07:00  INFO 32068 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/identity_service]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: identity_service/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-28T16:13:17.569+07:00  INFO 32068 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-28T16:13:17.647+07:00  INFO 32068 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28T16:13:17.744+07:00  INFO 32068 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-28T16:13:18.022+07:00  INFO 32068 --- [           main] c.e.I.c.ApplicationInitConfig            : Initializing application.....
+2026-03-28T16:13:18.097+07:00  WARN 32068 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-28T16:13:18.856+07:00  INFO 32068 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/identity'
+2026-03-28T16:13:18.863+07:00  INFO 32068 --- [           main] c.e.I.IndentityServiceApplication        : Started IndentityServiceApplication in 7.078 seconds (process running for 7.557)
+Hibernate: select u1_0.id,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.password,u1_0.username from user u1_0 where u1_0.username=?
+2026-03-28T16:13:19.654+07:00  INFO 32068 --- [           main] c.e.I.c.ApplicationInitConfig            : Application initialization completed .....

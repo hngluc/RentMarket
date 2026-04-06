@@ -26,10 +26,11 @@ public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificat
     Optional<Item> findWithImagesById(Long id);
 
     /**
-     * Atomically increments the view count for a given item,
-     * avoiding the need to load and save the full entity.
+     * Tăng lượt xem cho sản phẩm một cách atomic.
+     * clearAutomatically: xóa first-level cache sau khi update để tránh đọc giá trị cũ.
+     * flushAutomatically: đảm bảo flush trước khi thực thi query.
      */
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Item i SET i.viewCount = i.viewCount + 1 WHERE i.id = :id")
     void incrementViewCount(@Param("id") Long id);
 

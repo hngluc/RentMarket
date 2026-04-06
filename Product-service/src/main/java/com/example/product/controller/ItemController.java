@@ -82,6 +82,13 @@ public class ItemController {
                 .build();
     }
 
+    @PutMapping("/{id}/release")
+    public ApiResponse<ItemResponse> releaseItem(@PathVariable Long id) {
+        return ApiResponse.<ItemResponse>builder()
+                .result(itemService.releaseItem(id))
+                .build();
+    }
+
     @PostMapping(value = "/{id}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<ItemImageResponse> uploadItemImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         return ApiResponse.<ItemImageResponse>builder()

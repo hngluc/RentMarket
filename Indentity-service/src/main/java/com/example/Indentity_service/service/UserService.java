@@ -12,13 +12,22 @@ import com.example.Indentity_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,6 +36,9 @@ public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+
+    private static final long MAX_AVATAR_SIZE = 3 * 1024 * 1024; // 3MB
+    private static final String AVATAR_UPLOAD_DIR = "uploads/avatars";
 
     public UserResponse createUser(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername()))
@@ -49,6 +61,11 @@ public class UserService {
 
         userMapper.updateUser(user, request);
 
+        // Chỉ encode password nếu field password thực sự được gửi
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -60,6 +77,65 @@ public class UserService {
     public UserResponse getUser(String id) {
         return userMapper.toUserResponse(userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nguoi dung khong tim thay")));
+    }
+
+    public UserResponse getUserByUsername(String username) {
+        return userMapper.toUserResponse(userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Nguoi dung khong tim thay")));
+    }
+
+    public UserResponse getMyInfo() {
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        return userMapper.toUserResponse(user);
+    }
+
+    /**
+     * Upload avatar cho user hiện tại (xác định từ JWT).
+     * File lưu vào thư mục uploads/avatars/ với tên UUID unique.
+     * Giới hạn: 3MB.
+     */
+    public UserResponse uploadAvatar(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new RuntimeException("File ảnh không được để trống");
+        }
+        if (file.getSize() > MAX_AVATAR_SIZE) {
+            throw new RuntimeException("Kích thước ảnh tối đa 3MB");
+        }
+
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        try {
+            Path uploadPath = Paths.get(AVATAR_UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String originalFilename = file.getOriginalFilename();
+            String extension = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            }
+            String filename = UUID.randomUUID() + extension;
+
+            Path filePath = uploadPath.resolve(filename);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            user.setAvatarUrl(filename);
+            return userMapper.toUserResponse(userRepository.save(user));
+
+        } catch (IOException e) {
+            log.error("Lỗi upload avatar cho user {}: {}", username, e.getMessage());
+            throw new RuntimeException("Không thể upload ảnh đại diện");
+        }
     }
 
     public UserResponse deleteUser(String userId) {

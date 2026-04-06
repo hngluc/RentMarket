@@ -18,13 +18,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(Exception e) {
-        log.error("Exception: ", e);
+        log.error("Uncategorized Exception: ", e);
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+        // Include real exception message for debugging (in production, hide this)
+        apiResponse.setMessage("Uncategorized Exception: " + e.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        return ResponseEntity.status(500).body(apiResponse);
     }
 
     @ExceptionHandler(value = { ParseException.class, JOSEException.class })

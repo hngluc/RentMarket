@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -35,6 +36,13 @@ public class UserController {
         return apiResponse;
     }
 
+    @GetMapping("/my-info")
+    ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
     @GetMapping
     ApiResponse<List<UserResponse>> getAllUsers() {
        var authentication =  SecurityContextHolder.getContext().getAuthentication();
@@ -54,10 +62,25 @@ public class UserController {
                 .build();
     }
 
+    /** Endpoint nội bộ: lấy thông tin user bằng username (dùng bởi Rental-service, Product-service) */
+    @GetMapping("/by-username/{username}")
+    ApiResponse<UserResponse> getUserByUsername(@PathVariable String username) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUserByUsername(username))
+                .build();
+    }
+
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
+                .build();
+    }
+
+    @PostMapping("/avatar")
+    ApiResponse<UserResponse> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.uploadAvatar(file))
                 .build();
     }
 
@@ -69,3 +92,4 @@ public class UserController {
     }
 
 }
+

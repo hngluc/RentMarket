@@ -22,6 +22,10 @@ public class CreateItemRequest {
     @Min(value = 0, message = "Price per day must be at least 0")
     Double pricePerDay;
 
+    @Min(value = 1, message = "Quantity must be at least 1")
+    @Builder.Default
+    Integer quantity = 1;
+
     @NotNull(message = "Category ID must not be null")
     Long categoryId;
 }

@@ -30,8 +30,15 @@ public class SecurityConfig {
     //Authorization Endpoints
     String[] PUBLIC_ENDPOINTS = {
             "/users",
-            "/auth/**"
+            "/auth/**",
+            "/uploads/**",
+            "/oauth2/**",
+            "/login/**"
     };
+
+    @NonFinal
+    @org.springframework.beans.factory.annotation.Autowired
+    CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -42,14 +49,24 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users")
-                        .hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/oauth2/**", "/login/**").permitAll()
+                        // Cho phép internal service call lấy thông tin user theo ID hoặc username
+                        // UserResponse không chứa password — an toàn để expose
+                        .requestMatchers(HttpMethod.GET, "/users/{userId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/by-username/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users").authenticated()
                 .anyRequest().authenticated());
 
         http.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
                         jwtConfigurer.decoder(jwtDecoder())
                                 .jwtAuthenticationConverter(jwtConverter()))
+        );
+
+        http.oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(auth -> auth.baseUri("/oauth2/authorization"))
+                .successHandler(customOAuth2SuccessHandler)
         );
 
         //Disable Attack csrf
